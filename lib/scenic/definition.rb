@@ -15,7 +15,13 @@ module Scenic
     end
 
     def full_path
-      Rails.root.join(path)
+      if Rails.application && Rails.application.config.paths["db/views"]
+        File.join(Rails.application.config.paths["db/views"].first, filename)
+      elsif Rails.root
+        Rails.root.join(path)
+      else
+        File.join(Dir.pwd, path)
+      end
     end
 
     def path
